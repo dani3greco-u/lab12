@@ -1,5 +1,8 @@
 package it.unibo.es1;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -7,15 +10,22 @@ import java.util.List;
  */
 public class LogicsImpl implements Logics {
 
-    private static final String ERROR_MESSAGE = "Unimplemented method";
+    //private static final String ERROR_MESSAGE = "Unimplemented method";
+    private static final int STEP = 1;
+    private static final int INITIAL_STATE = 0;
+    private final List<Integer> list;
 
     /**
      * Constructor.
      *
      * @param size the size of the logics
+     * 
      */
     public LogicsImpl(final int size) {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        list = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            list.add(INITIAL_STATE);
+        }
     }
 
     /**
@@ -23,7 +33,7 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public int size() {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        return list.size();
     }
 
     /**
@@ -31,7 +41,7 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public List<Integer> values() {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        return Collections.unmodifiableList(list);
     }
 
     /**
@@ -39,7 +49,12 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public List<Boolean> enabledStates() {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        final List<Boolean> lBoolean = new ArrayList<>();
+        final Iterator<Integer> it = list.iterator();
+        while (it.hasNext()) {
+            lBoolean.add(!it.next().equals(list.size()));
+        }
+        return Collections.unmodifiableList(lBoolean);
     }
 
     /**
@@ -47,7 +62,8 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public int hit(final int elem) {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        list.set(elem, list.get(elem) + STEP);
+        return list.get(elem);
     }
 
     /**
@@ -55,7 +71,12 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public String result() {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        final StringBuilder sb = new StringBuilder("<<");
+        for (int i = 0; i < list.size() - 1; i++) {
+            sb.append(list.get(i).toString()).append('|');
+        }
+        sb.append(list.get(list.size() - 1).toString()).append(">>");
+        return sb.toString();
     }
 
     /**
@@ -63,6 +84,13 @@ public class LogicsImpl implements Logics {
      */
     @Override
     public boolean toQuit() {
-        throw new UnsupportedOperationException(ERROR_MESSAGE);
+        final int firstValue = list.get(0);
+        final Iterator<Integer> it = this.values().iterator();
+        while (it.hasNext()) {
+            if (!it.next().equals(firstValue)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
