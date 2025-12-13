@@ -1,6 +1,5 @@
 package it.unibo.es2;
 
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,36 +31,20 @@ public class LogicsImpl implements Logics {
      * {@inheritDoc}
      */
     @Override
-    public int size() {
-        return list.size();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<List<Boolean>> values() {
-        return Collections.unmodifiableList(list);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean hit(final Pair<Integer, Integer> position) {
-        final boolean value = !this.getCeil(position.x(), position.y());
+        final boolean value = !this.getCell(position.x(), position.y());
         list.get(position.x()).set(position.y(), value);
         return value;
     }
 
     /**
-     * The value of the ceil.
+     * The value of the cell.
      * 
      * @param row the row of the matrix
      * @param col the column of the matrix
      * @return the value of the ceil
      */
-    public boolean getCeil(final int row, final int col) {
+    private boolean getCell(final int row, final int col) {
         return list.get(row).get(col);
     }
 
